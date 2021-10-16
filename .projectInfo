@@ -1,0 +1,15 @@
+>JDK Path
+-/usr/lib/jvm/jdk-17
+>Main Class
+-omega.plugin.PluginManager
+>Non-Java Project
+-false
+>Language Tag
+-0
+>Opened Editors on Main Tab Panel
+-project-root$/src/omega/plugin/Plugin.java
+-project-root$/src/omega/plugin/PluginManager.java
+>Project Classpath : Required Jars
+-/home/ubuntu/Documents/Omega IDE/lib/flatlaf-0.46.jar
+>Project Classpath : Required Resource Roots
+-/home/ubuntu/Documents/Omega IDE/res
