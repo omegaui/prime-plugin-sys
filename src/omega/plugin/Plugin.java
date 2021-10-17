@@ -13,7 +13,7 @@ public interface Plugin {
 	String getDescription();
 	String getSizeInMegaBytes();
 	URL getImage();
-	PluginCategory getPluginCategory();
+	String getPluginCategory();
 	
 	default LinkedList<URL> getScreenshots(){
 		return new LinkedList<URL>();

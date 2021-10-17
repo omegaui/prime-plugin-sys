@@ -15,6 +15,8 @@ public class UIManager {
 	public static Color TOOLMENU_COLOR3_SHADE = new Color(TOOLMENU_COLOR3.getRed(), TOOLMENU_COLOR3.getGreen(), TOOLMENU_COLOR3.getBlue(), 40);
 	public static Color TOOLMENU_COLOR4 = Color.decode("#EB7201");
 	public static Color TOOLMENU_COLOR4_SHADE = new Color(TOOLMENU_COLOR4.getRed(), TOOLMENU_COLOR4.getGreen(), TOOLMENU_COLOR4.getBlue(), 40);
+	public static Color TOOLMENU_COLOR5 = new Color(16, 62, 110);
+	public static Color TOOLMENU_COLOR5_SHADE = new Color(16, 62, 110, 40);
 	public static Color TOOLMENU_GRADIENT = Color.decode("#132132");
 	public static Color ALPHA = new Color(0, 0, 0, 0);
 	
@@ -64,6 +66,8 @@ public class UIManager {
 				TOOLMENU_COLOR3_SHADE = new Color(TOOLMENU_COLOR3.getRed(), TOOLMENU_COLOR3.getGreen(), TOOLMENU_COLOR3.getBlue(), 40);
 				TOOLMENU_COLOR4 = Color.decode("#EB7201");
 				TOOLMENU_COLOR4_SHADE = new Color(TOOLMENU_COLOR4.getRed(), TOOLMENU_COLOR4.getGreen(), TOOLMENU_COLOR4.getBlue(), 40);
+				TOOLMENU_COLOR5 = Color.decode("#7f6021");
+				TOOLMENU_COLOR5_SHADE = new Color(TOOLMENU_COLOR4.getRed(), TOOLMENU_COLOR4.getGreen(), TOOLMENU_COLOR4.getBlue(), 40);
 				TOOLMENU_GRADIENT = Color.decode("#132132");
 				
 				back1 = Color.decode("#111111");
@@ -91,6 +95,6 @@ public class UIManager {
 	public static final Font UBUNTU_PX16 = new Font("Ubuntu", Font.BOLD, 16);
 	
 	public static boolean isDarkMode(){
-		return true;
+		return false;
 	}
 }
