@@ -1,4 +1,6 @@
 package omega.plugin;
+import omega.plugin.ui.PluginStore;
+
 import java.util.LinkedList;
 
 import java.io.File;
@@ -52,6 +54,6 @@ public class PluginManager extends DataBase{
 	}
 
 	public static void main(String[] args){
-		new PluginManager();
+		new PluginStore(new PluginManager()).setVisible(true);
 	}
 }

@@ -1,4 +1,7 @@
 package omega.plugin;
+import java.util.LinkedList;
+
+import java.net.URL;
 public interface Plugin {
 	boolean init();
 	boolean enable();
@@ -9,4 +12,10 @@ public interface Plugin {
 	String getAuthor();
 	String getDescription();
 	String getSizeInMegaBytes();
+	URL getImage();
+	PluginCategory getPluginCategory();
+	
+	default LinkedList<URL> getScreenshots(){
+		return new LinkedList<URL>();
+	}
 }
