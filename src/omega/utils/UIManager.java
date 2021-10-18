@@ -1,6 +1,10 @@
 package omega.utils;
-import com.formdev.flatlaf.*;
-import java.awt.*;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+
+import java.awt.Color;
+import java.awt.GraphicsEnvironment;
+import java.awt.Font;
 public class UIManager {
 	
 	public static Color c1 = Color.decode("#132162");

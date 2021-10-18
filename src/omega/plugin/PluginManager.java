@@ -1,4 +1,6 @@
 package omega.plugin;
+import omega.utils.ChoiceDialog;
+
 import omega.plugin.ui.PluginStore;
 
 import java.util.LinkedList;
@@ -51,6 +53,30 @@ public class PluginManager extends DataBase{
 			if(plugin.init())
 				plugin.enable();
 		}
+	}
+
+	public synchronized void uninstallPlugin(PluginStore store, String name){
+		int choice = ChoiceDialog.makeChoice(store, "Do You Want to Uninstall This Plugin?", "Yes", "No");
+		if(choice == ChoiceDialog.CHOICE1){
+			store.setStatus("Deleting " + name + " ...");
+			Plugin plugin = getPluginObject(name);
+			File file = new File(PLUGINS_DIRECTORY.getAbsolutePath(), getPluginObject(name).getClass().getName() + ".jar");
+			if(file.delete()){
+				store.setStatus(null);
+				plugins.remove(plugin);
+				store.refresh();
+			}
+			else
+				store.setStatus("Unable to Delete Plugin : " + name);
+		}
+	}
+
+	public synchronized boolean isPluginInstalled(String pluginName){
+		for(Plugin plx : plugins){
+			if(plx.getName().equals(pluginName))
+				return true;
+		}
+		return false;
 	}
 
 	public static void main(String[] args){

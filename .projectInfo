@@ -7,11 +7,11 @@
 >Language Tag
 -0
 >Opened Editors on Main Tab Panel
--project-root$/src/omega/plugin/PluginManager.java
 -project-root$/src/omega/plugin/ui/PluginStore.java
--project-root$/src/omega/plugin/ui/RemotePluginComp.java
 -project-root$/src/omega/plugin/PluginCategory.java
--project-root$/src/omega/utils/UIManager.java
+-project-root$/src/omega/plugin/ui/RemotePluginComp.java
+-project-root$/src/omega/plugin/PluginManager.java
+-project-root$/src/omega/utils/ChoiceDialog.java
 >Project Classpath : Required Jars
 -/home/ubuntu/Documents/Omega IDE/lib/flatlaf-0.46.jar
 >Project Classpath : Required Resource Roots

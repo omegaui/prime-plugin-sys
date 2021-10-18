@@ -1,16 +1,24 @@
 package omega.plugin.ui;
+import java.io.PrintWriter;
+
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import java.util.LinkedList;
 
 import java.awt.geom.RoundRectangle2D;
 
 import omega.plugin.PluginManager;
+import omega.plugin.PluginCategory;
 
 import omega.utils.IconManager;
+import omega.utils.ChoiceDialog;
 
 import omega.comp.TextComp;
 import omega.comp.FlexPanel;
+import omega.comp.NoCaretField;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,6 +28,7 @@ import static omega.utils.UIManager.*;
 import static omega.comp.Animations.*;
 public class PluginStore extends JFrame{
 	public PluginManager pluginManager;
+	public PluginCategory pluginCategory;
 	
 	public TextComp iconComp;
 	public TextComp titleComp;
@@ -33,13 +42,18 @@ public class PluginStore extends JFrame{
 	public JScrollPane contentScrollPane;
 	public JPanel panel;
 
+	public NoCaretField searchField;
+	public TextComp categoryComp;
+
+	public String currentCategory = PluginCategory.ANY_CATEGORY;
+
 	public LinkedList<RemotePluginComp> remotePluginComps = new LinkedList<>();
-	
+
 	public PluginStore(PluginManager pluginManager){
 		super("Plugin Store");
 		this.pluginManager = pluginManager;
 		setUndecorated(true);
-		setSize(500, 450);
+		setSize(550, 450);
 		setLocationRelativeTo(null);
 		JPanel panel = new JPanel(null);
 		panel.setBackground(back1);
@@ -50,6 +64,8 @@ public class PluginStore extends JFrame{
 	}
 
 	public void init(){
+		pluginCategory = new PluginCategory(this);
+		
 		iconComp = new TextComp(IconManager.ideImage64, 25, 25, back2, back2, back2, null);
 		iconComp.setBounds(0, 0, 30, 30);
 		iconComp.setClickable(false);
@@ -78,26 +94,77 @@ public class PluginStore extends JFrame{
 		setStatus(null);
 		add(statusComp);
 
-		contentPanel = new FlexPanel(null, c2, null);
+		contentPanel = new FlexPanel(null, back3, null);
 		contentPanel.setBounds(5, 60, getWidth() - 10, getHeight() - 100);
 		contentPanel.setArc(10, 10);
 		add(contentPanel);
 
-		contentScrollPane = new JScrollPane(panel = new JPanel(null));
+		contentScrollPane = new JScrollPane(panel = new JPanel(null){
+			String hint = "No Plugins Found!";
+			@Override
+			public void paint(Graphics graphics){
+				if(remotePluginComps.isEmpty()){
+					Graphics2D g = (Graphics2D)graphics;
+					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+					g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+					g.setColor(getBackground());
+					g.fillRect(0, 0, getWidth(), getHeight());
+					g.setFont(PX14);
+					g.setColor(TOOLMENU_COLOR1);
+					g.drawString(hint, getWidth()/2 - g.getFontMetrics().stringWidth(hint)/2, getHeight()/2 - g.getFontMetrics().getHeight()/2 + g.getFontMetrics().getAscent() - g.getFontMetrics().getDescent() + 1);
+				}
+				else
+					super.paint(graphics);
+			}
+		});
 		contentScrollPane.setBounds(5, 5, contentPanel.getWidth() - 10, contentPanel.getHeight() - 10);
 		contentScrollPane.setBackground(back1);
 		contentScrollPane.setBorder(null);
-		panel.setBackground(back1);
+		panel.setBackground(back2);
 		contentPanel.add(contentScrollPane);
+
+		searchField = new NoCaretField("", "Start Typing", TOOLMENU_COLOR2, c2, TOOLMENU_COLOR3);
+		searchField.setBounds(5, 30, getWidth() - 160, 25);
+		searchField.setFont(PX14);
+		searchField.setOnAction(()->genView(currentCategory, searchField.getText()));
+		add(searchField);
+
+		categoryComp = new TextComp("All", "Click to Select Category!", TOOLMENU_COLOR5_SHADE, back1, glow, ()->{
+			String category = pluginCategory.makeChoice(currentCategory);
+			if(category != null){
+				currentCategory = category;
+				genView(currentCategory, "");
+				searchField.setText("");
+				
+				categoryComp.setGradientColor(PluginCategory.getSuitableColor(currentCategory));
+				
+				if(currentCategory.equals(PluginCategory.ANY_CATEGORY))
+					categoryComp.setText("All");
+				else
+					categoryComp.setText(currentCategory.toUpperCase());
+			}
+		});
+		categoryComp.setBounds(searchField.getX() + searchField.getWidth(), 30, 150, 25);
+		categoryComp.setFont(PX14);
+		categoryComp.setArc(0, 0);
+		categoryComp.setPaintTextGradientEnabled(true);
+		categoryComp.setGradientColor(PluginCategory.getSuitableColor(PluginCategory.ANY_CATEGORY));
+		add(categoryComp);
 	}
 
-	public void genView(){
+	public void genView(String category, String text){
 		remotePluginComps.forEach(panel::remove);
 		remotePluginComps.clear();
 		
 		int block = 0;
 		for(RemotePluginInfo info : remotePluginInfoLoader.remotePluginInfos){
-			RemotePluginComp comp = new RemotePluginComp(info, contentScrollPane.getWidth(), 60);
+			if(!category.equals(PluginCategory.ANY_CATEGORY) && !info.category.equalsIgnoreCase(category))
+				continue;
+			if(!info.name.contains(text) && !info.description.contains(text))
+				continue;
+			
+			RemotePluginComp comp = new RemotePluginComp(this, info, contentScrollPane.getWidth(), 60);
 			comp.setLocation(0, block);
 			panel.add(comp);
 			remotePluginComps.add(comp);
@@ -107,11 +174,13 @@ public class PluginStore extends JFrame{
 		panel.setPreferredSize(new Dimension(contentScrollPane.getWidth(), block));
 		layout();
 		repaint();
-
+		
 		new Thread(()->{
+			setStatus("Loading Plugin Icons ...");
 			remotePluginComps.forEach(comp->{
 				comp.loadIcon();
 			});
+			setStatus(remotePluginInfoLoader.remotePluginInfos.size() + " Plugin(s) Available in the Store!");
 		}).start();
 	}
 
@@ -120,11 +189,27 @@ public class PluginStore extends JFrame{
 		new Thread(()->{
 			remotePluginInfoLoader.loadRemotePluginInfos();
 			if(!remotePluginInfoLoader.remotePluginInfos.isEmpty())
-				genView();
+				genView(PluginCategory.ANY_CATEGORY, "");
 		}).start();
 	}
 
-	public void setStatus(String text){
+	public void refresh(){
+		genView(currentCategory, searchField.getText());
+	}
+
+	public synchronized void downloadPlugin(RemotePluginInfo info){
+		try{
+			int choice = ChoiceDialog.makeChoice(store, "Do You Want to Download This Plugin?", "Yes", "No");
+			if(choice != ChoiceDialog.CHOICE1)
+				return;
+			
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized void setStatus(String text){
 		if(text == null)
 			statusComp.setText("Copyright 2020 Omega UI. All Right Reserved.");
 		else
