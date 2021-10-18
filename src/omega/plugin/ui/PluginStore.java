@@ -1,5 +1,8 @@
 package omega.plugin.ui;
 import java.io.PrintWriter;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -12,6 +15,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import omega.plugin.PluginManager;
 import omega.plugin.PluginCategory;
+import omega.plugin.Downloader;
 
 import omega.utils.IconManager;
 import omega.utils.ChoiceDialog;
@@ -199,12 +203,31 @@ public class PluginStore extends JFrame{
 
 	public synchronized void downloadPlugin(RemotePluginInfo info){
 		try{
-			int choice = ChoiceDialog.makeChoice(store, "Do You Want to Download This Plugin?", "Yes", "No");
+			int choice = ChoiceDialog.makeChoice(this, "Do You Want to Download This Plugin?", "Yes", "No");
 			if(choice != ChoiceDialog.CHOICE1)
 				return;
+			setStatus("Downloading " + info.name + " ... ");
+			BufferedInputStream in = new BufferedInputStream(Downloader.openStream(info.pluginFileURL.toString()));
+			File localPluginFile = new File(PluginManager.PLUGINS_DIRECTORY.getAbsolutePath(), info.fileName);
+			FileOutputStream out = new FileOutputStream(localPluginFile);
 			
+			byte dataBuffer[] = new byte[1024];
+			int bytesRead;
+			while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+				out.write(dataBuffer, 0, bytesRead);
+				out.flush();
+				
+				double currentLength = localPluginFile.length() / 1000;
+				double length = Double.parseDouble(info.size.substring(0, info.size.indexOf("MB")).trim()) * 1000;
+                    int percentage = (int)((currentLength * 100) / length);
+                    setStatus("Downloading " + info.name + " " + percentage + "%");
+			}
+			in.close();
+			out.close();
+			setStatus("Downloaded " + info.name + ", Restart Required!");
 		}
 		catch(Exception e){
+			setStatus("Unable to Download " + info.name + "!");
 			e.printStackTrace();
 		}
 	}

@@ -47,10 +47,11 @@ public class RemotePluginInfoLoader {
 					info.license = pluginInfoDataBase.getEntryAt(pluginName, 2).getValue();
 					info.size = pluginInfoDataBase.getEntryAt(pluginName, 3).getValue();
 					info.category = pluginInfoDataBase.getEntryAt(pluginName, 4).getValue();
-					info.pluginFileURL = new URL(pluginInfoDataBase.getEntryAt(pluginName, 5).getValue());
-					info.imageURL = new URL(pluginInfoDataBase.getEntryAt(pluginName, 6).getValue());
+					info.fileName = pluginInfoDataBase.getEntryAt(pluginName, 5).getValue();
+					info.pluginFileURL = new URL(pluginInfoDataBase.getEntryAt(pluginName, 6).getValue());
+					info.imageURL = new URL(pluginInfoDataBase.getEntryAt(pluginName, 7).getValue());
 					LinkedList<DataEntry> entries = pluginInfoDataBase.getEntries(pluginName);
-					if(entries.size() > 7){
+					if(entries.size() > 8){
 						for(int i = 6; i < entries.size(); i++){
 							String url = entries.get(i).getValue();
 							if(!url.equals(""))
