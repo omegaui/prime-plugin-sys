@@ -64,7 +64,7 @@ public class RemotePluginComp extends FlexPanel{
 		iconComp.addMouseListener(getMouseListeners()[0]);
 		add(iconComp);
 
-		nameComp = new TextComp(remotePluginInfo.name, c2, c2, PluginCategory.getSuitableColor(remotePluginInfo.category), null);
+		nameComp = new TextComp(remotePluginInfo.name + " " + remotePluginInfo.version, c2, c2, PluginCategory.getSuitableColor(remotePluginInfo.category), null);
 		nameComp.setBounds(getHeight(), 2, getWidth() - 160, 25);
 		nameComp.setFont(PX14);
 		nameComp.setClickable(false);
@@ -95,7 +95,7 @@ public class RemotePluginComp extends FlexPanel{
 		descriptionComp.addMouseListener(getMouseListeners()[0]);
 		add(descriptionComp);
 
-		installComp = new TextComp(pluginStore.pluginManager.isPluginInstalled(remotePluginInfo.name) ? "Uninstall" : "Install", TOOLMENU_COLOR1_SHADE, back2, TOOLMENU_COLOR1, this::installAction);
+		installComp = new TextComp(pluginStore.pluginManager.isPluginInstalled(remotePluginInfo.fileName) ? "Uninstall" : "Install", TOOLMENU_COLOR1_SHADE, back2, TOOLMENU_COLOR1, this::installAction);
 		installComp.setBounds(getWidth() - 100, 2, 99, 25);
 		installComp.setFont(PX14);
 		installComp.setArc(2, 2);
@@ -113,7 +113,7 @@ public class RemotePluginComp extends FlexPanel{
 	}
 
 	public void installAction(){
-		if(pluginStore.pluginManager.isPluginInstalled(remotePluginInfo.name)){
+		if(pluginStore.pluginManager.isPluginInstalled(remotePluginInfo.fileName)){
 			pluginStore.pluginManager.uninstallPlugin(pluginStore, remotePluginInfo.name);
 		}
 		else {

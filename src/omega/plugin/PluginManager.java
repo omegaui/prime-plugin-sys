@@ -60,6 +60,8 @@ public class PluginManager extends DataBase{
 		if(choice == ChoiceDialog.CHOICE1){
 			store.setStatus("Deleting " + name + " ...");
 			Plugin plugin = getPluginObject(name);
+			if(plugin == null)
+				return;
 			File file = new File(PLUGINS_DIRECTORY.getAbsolutePath(), getPluginObject(name).getClass().getName() + ".jar");
 			if(file.delete()){
 				store.setStatus(null);
@@ -71,12 +73,8 @@ public class PluginManager extends DataBase{
 		}
 	}
 
-	public synchronized boolean isPluginInstalled(String pluginName){
-		for(Plugin plx : plugins){
-			if(plx.getName().equals(pluginName))
-				return true;
-		}
-		return false;
+	public synchronized boolean isPluginInstalled(String fileName){
+		return new File(PLUGINS_DIRECTORY.getAbsolutePath(), fileName).exists();
 	}
 
 	public static void main(String[] args){

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.LinkedList;
 public class RemotePluginInfo {
 	public String name;
+	public String version;
 	public String description;
 	public String author;
 	public String license;

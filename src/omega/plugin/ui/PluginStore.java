@@ -224,6 +224,7 @@ public class PluginStore extends JFrame{
 			}
 			in.close();
 			out.close();
+			refresh();
 			setStatus("Downloaded " + info.name + ", Restart Required!");
 		}
 		catch(Exception e){

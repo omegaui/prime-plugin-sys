@@ -1,4 +1,6 @@
 package omega.plugin;
+import java.util.zip.ZipFile;
+
 import java.util.LinkedList;
 
 import java.net.URLClassLoader;
@@ -34,11 +36,20 @@ public class PluginLoader {
 				}
 			}
 			URL[] urls = new URL[plugins.length];
+			boolean empty = true;
 			for(int i = 0; i < plugins.length; i++){
-				urls[i] = plugins[i].toURL();
-				pluginClassNames.add(plugins[i].getName().substring(0, plugins[i].getName().lastIndexOf(".")));
+				try{
+					new ZipFile(plugins[i]).close();
+					urls[i] = plugins[i].toURL();
+					pluginClassNames.add(plugins[i].getName().substring(0, plugins[i].getName().lastIndexOf(".")));
+					empty = false;
+				}
+				catch(Exception e){
+					
+				}
 			}
-			classLoader = URLClassLoader.newInstance(urls);
+			if(!empty)
+				classLoader = URLClassLoader.newInstance(urls);
 		}
 		catch(Exception e){
 			e.printStackTrace();

@@ -42,16 +42,17 @@ public class RemotePluginInfoLoader {
 				try{
 					RemotePluginInfo info = new RemotePluginInfo();
 					info.name = pluginName;
-					info.description = pluginInfoDataBase.getEntryAt(pluginName, 0).getValue();
-					info.author = pluginInfoDataBase.getEntryAt(pluginName, 1).getValue();
-					info.license = pluginInfoDataBase.getEntryAt(pluginName, 2).getValue();
-					info.size = pluginInfoDataBase.getEntryAt(pluginName, 3).getValue();
-					info.category = pluginInfoDataBase.getEntryAt(pluginName, 4).getValue();
-					info.fileName = pluginInfoDataBase.getEntryAt(pluginName, 5).getValue();
-					info.pluginFileURL = new URL(pluginInfoDataBase.getEntryAt(pluginName, 6).getValue());
-					info.imageURL = new URL(pluginInfoDataBase.getEntryAt(pluginName, 7).getValue());
+					info.version = pluginInfoDataBase.getEntryAt(pluginName, 0).getValue();
+					info.description = pluginInfoDataBase.getEntryAt(pluginName, 1).getValue();
+					info.author = pluginInfoDataBase.getEntryAt(pluginName, 2).getValue();
+					info.license = pluginInfoDataBase.getEntryAt(pluginName, 3).getValue();
+					info.size = pluginInfoDataBase.getEntryAt(pluginName, 4).getValue();
+					info.category = pluginInfoDataBase.getEntryAt(pluginName, 5).getValue();
+					info.fileName = pluginInfoDataBase.getEntryAt(pluginName, 6).getValue();
+					info.pluginFileURL = new URL(pluginInfoDataBase.getEntryAt(pluginName, 7).getValue());
+					info.imageURL = new URL(pluginInfoDataBase.getEntryAt(pluginName, 8).getValue());
 					LinkedList<DataEntry> entries = pluginInfoDataBase.getEntries(pluginName);
-					if(entries.size() > 8){
+					if(entries.size() > 9){
 						for(int i = 6; i < entries.size(); i++){
 							String url = entries.get(i).getValue();
 							if(!url.equals(""))
