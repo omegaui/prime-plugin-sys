@@ -24,6 +24,8 @@ import static omega.comp.Animations.*;
 public class RemotePluginComp extends FlexPanel{
 
 	public PluginStore pluginStore;
+
+	public RemotePluginView remotePluginView;
 	
 	public RemotePluginInfo remotePluginInfo;
 	
@@ -51,6 +53,12 @@ public class RemotePluginComp extends FlexPanel{
 			@Override
 			public void mouseExited(MouseEvent e){
 				setEnter(false);
+			}
+			@Override
+			public void mousePressed(MouseEvent e){
+				if(remotePluginView == null)
+					remotePluginView = new RemotePluginView(RemotePluginComp.this);
+				remotePluginView.setVisible(true);
 			}
 		});
 		init();

@@ -99,6 +99,6 @@ public class UIManager {
 	public static final Font UBUNTU_PX16 = new Font("Ubuntu", Font.BOLD, 16);
 	
 	public static boolean isDarkMode(){
-		return false;
+		return true;
 	}
 }

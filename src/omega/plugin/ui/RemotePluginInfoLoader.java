@@ -53,7 +53,7 @@ public class RemotePluginInfoLoader {
 					info.imageURL = new URL(pluginInfoDataBase.getEntryAt(pluginName, 8).getValue());
 					LinkedList<DataEntry> entries = pluginInfoDataBase.getEntries(pluginName);
 					if(entries.size() > 9){
-						for(int i = 6; i < entries.size(); i++){
+						for(int i = 9; i < entries.size(); i++){
 							String url = entries.get(i).getValue();
 							if(!url.equals(""))
 								info.screenshotsURLs.add(new URL(url));
