@@ -192,19 +192,21 @@ public class PluginsView extends JFrame{
 		categoryComp.alignX = 5;
 		contentPanel.add(categoryComp);
 
-		leftComp = new TextComp("<", TOOLMENU_COLOR2, TOOLMENU_COLOR3, c2, this::moveLeft);
+		leftComp = new TextComp("<", TOOLMENU_COLOR5_SHADE, back2, glow, this::moveLeft);
 		leftComp.setBounds(2, 160 + (contentPanel.getHeight() - 160)/2 - 30/2, 30, 30);
 		leftComp.setFont(PX22);
 		leftComp.setArc(2, 2);
+		leftComp.setVisible(false);
 		contentPanel.add(leftComp);
 
-		rightComp = new TextComp(">", TOOLMENU_COLOR2, TOOLMENU_COLOR3, c2, this::moveRight);
+		rightComp = new TextComp(">", TOOLMENU_COLOR5_SHADE, back2, glow, this::moveRight);
 		rightComp.setBounds(contentPanel.getWidth() - 2 - 30, 160 + (contentPanel.getHeight() - 160)/2 - 30/2, 30, 30);
 		rightComp.setFont(PX22);
 		rightComp.setArc(2, 2);
+		rightComp.setVisible(false);
 		contentPanel.add(rightComp);
 
-		screenshotComp = new TextComp("", c2, c2, TOOLMENU_COLOR5, null);
+		screenshotComp = new TextComp("", back1, back1, TOOLMENU_COLOR5, null);
 		screenshotComp.setBounds(35, 160 + (contentPanel.getHeight() - 160)/2 - (contentPanel.getHeight() - 200)/2, contentPanel.getWidth() - 70, contentPanel.getHeight() - 200);
 		screenshotComp.setFont(PX14);
 		screenshotComp.setArc(0, 0);
@@ -266,7 +268,6 @@ public class PluginsView extends JFrame{
 			setStatus(localPluginComps.size() + " Plugin(s) currently Installed!");
 			genView(localPluginComps.get(0));
 		}).start();
-
 	}
 	
 	public void genView(LocalPluginComp comp){
@@ -296,11 +297,18 @@ public class PluginsView extends JFrame{
 						}
 						screenshotComp.image = comp.screenshots.get(comp.pointer = 0);
 						screenshotComp.setText("");
+						leftComp.setVisible(true);
+						rightComp.setVisible(true);
 					}
-					else
+					else{
+						leftComp.setVisible(false);
+						rightComp.setVisible(false);
 						screenshotComp.setText("No Screenshots Available");
+					}
 				}
 				catch(Exception e){
+					leftComp.setVisible(false);
+					rightComp.setVisible(false);
 					System.err.println("Unable to load screenshot of plugin " + comp.plugin.getName() + " at Plugin Manager!");
 					e.printStackTrace();
 				}
@@ -309,9 +317,14 @@ public class PluginsView extends JFrame{
 				if(!comp.screenshots.isEmpty()){
 					screenshotComp.image = comp.screenshots.get(comp.pointer);
 					screenshotComp.repaint();
+					leftComp.setVisible(true);
+					rightComp.setVisible(true);
 				}
-				else
+				else{
+					leftComp.setVisible(false);
+					rightComp.setVisible(false);
 					screenshotComp.setText("No Screenshots Available");
+				}
 			}
 		}).start();
 	}
