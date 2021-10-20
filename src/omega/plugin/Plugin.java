@@ -12,6 +12,7 @@ public interface Plugin {
 	String getAuthor();
 	String getDescription();
 	String getSizeInMegaBytes();
+	String getLicense();
 	URL getImage();
 	String getPluginCategory();
 	

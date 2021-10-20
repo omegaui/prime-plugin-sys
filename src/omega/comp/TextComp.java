@@ -315,7 +315,6 @@ public class TextComp extends JComponent{
 		
 		textX = x;
 		textY = y;
-		textWidth = g.getFontMetrics().stringWidth(dir);
 		textHeight = g.getFontMetrics().getHeight();
 		
 		if(isPaintGradientEnabled()){
@@ -344,13 +343,17 @@ public class TextComp extends JComponent{
 	}
 	
 	public void draw(Graphics2D g, int x, int y){
+		g.setFont(getFont());
+		
 		textX = alignX < 0 ? x : alignX;
+		textWidth = g.getFontMetrics().stringWidth(getText());
+		
 		
 		if(isPaintTextGradientEnabled()){	
 			if(gradientMode == GRADIENT_MODE_DEFAULT)
-				g.setPaint(new GradientPaint(textX, y, color3, g.getFontMetrics().stringWidth(dir), g.getFontMetrics().getHeight(), colorG));
+				g.setPaint(new GradientPaint(textX, y, color3, textWidth, textHeight, colorG));
 			else if(gradientMode == GRADIENT_MODE_LINEAR)
-				g.setPaint(new LinearGradientPaint(textX, y, g.getFontMetrics().stringWidth(dir), g.getFontMetrics().getHeight(), fractions, gradientColors));
+				g.setPaint(new LinearGradientPaint(textX, y, textWidth, textHeight, fractions, gradientColors));
 		}
 		else
 			g.setColor(color3);
@@ -359,18 +362,18 @@ public class TextComp extends JComponent{
 			String temp = dir.substring(0, dir.length()/2) + "..";
 			x = getWidth()/2 - g.getFontMetrics().stringWidth(temp)/2;
 			textX = alignX < 0 ? x : alignX;
+			textWidth = g.getFontMetrics().stringWidth(temp);
 			if(isPaintTextGradientEnabled()){	
 				if(gradientMode == GRADIENT_MODE_DEFAULT)
-					g.setPaint(new GradientPaint(textX, y, color3, g.getFontMetrics().stringWidth(temp), g.getFontMetrics().getHeight(), colorG));
+					g.setPaint(new GradientPaint(textX, y, color3, textWidth, textHeight, colorG));
 				else if(gradientMode == GRADIENT_MODE_LINEAR)
-					g.setPaint(new LinearGradientPaint(textX, y, g.getFontMetrics().stringWidth(temp), g.getFontMetrics().getHeight(), fractions, gradientColors));
+					g.setPaint(new LinearGradientPaint(textX, y, textWidth, textHeight, fractions, gradientColors));
 			}
-			g.drawString(temp, alignX < 0 ? x : alignX, y);
+			g.drawString(temp, textX, y);
 			setToolTipText(dir);
-			textWidth = g.getFontMetrics().stringWidth(temp);
 		}
 		else {
-			g.drawString(dir, alignX < 0 ? x : alignX, y);
+			g.drawString(dir, textX, y);
 		}
 	}
 	
